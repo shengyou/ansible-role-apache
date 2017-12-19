@@ -1,0 +1,50 @@
+---
+
+- name: install apache2
+  package:
+    name: apache2
+    state: present
+    update_cache: yes
+  tags:
+    - install
+
+- name: setup apache2
+  block:
+    - name: set apache2.conf (custom)
+      copy:
+        src: "{{ custom_apache2_conf }}"
+        backup: yes
+        dest: /etc/apache2/apache2.conf
+        group: root
+        owner: root
+        mode: 0644
+      when: custom_apache2_conf is defined
+
+    - name: set site config (custom)
+      copy:
+        src: "{{ item.src }}/{{ item.filename }}"
+        backup: yes
+        dest: "/etc/apache2/sites-available/{{ item.filename }}"
+        group: root
+        owner: root
+        mode: 0644
+      with_items:
+        - "{{ custom_site_conf }}"
+      notify: restart_apache2
+      when: custom_site_conf is defined
+
+    - name: "Create apache2 sites-enabled link | {{ item.filename }}"
+      file:
+        src: "/etc/apache2/sites-available/{{ item.filename }}"
+        dest: "/etc/apache2/sites-enabled/{{ item.filename }}"
+        owner: root
+        group: root
+        state: link
+      with_items:
+        - "{{ custom_site_conf }}"
+      notify: restart_apache2
+      when: custom_site_conf is defined
+
+  become: yes
+  tags:
+    - setup

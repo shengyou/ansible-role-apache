@@ -1,0 +1,45 @@
+---
+
+- block:
+    - name: install epel-release (CentOS)
+      yum:
+        name: epel-release
+        state: present
+        update_cache: yes
+
+    - name: install httpd
+      package:
+        name: httpd
+        state: present
+        update_cache: yes
+  tags:
+    - install
+
+- name: setup httpd
+  block:
+    - name: set httpd.conf (custom)
+      copy:
+        src: "{{ custom_apache2_conf }}"
+        backup: yes
+        dest: /etc/httpd/httpd.conf
+        group: root
+        owner: root
+        mode: 0644
+      when: custom_apache2_conf is defined
+
+    - name: set site config (custom)
+      copy:
+        src: "{{ item.src }}/{{ item.filename }}"
+        backup: yes
+        dest: "/etc/httpd/conf.d/{{ item.filename }}"
+        group: root
+        owner: root
+        mode: 0644
+      with_items:
+        - "{{ custom_site_conf }}"
+      notify: restart_httpd
+      when: custom_site_conf is defined
+
+  become: yes
+  tags:
+    - setup
