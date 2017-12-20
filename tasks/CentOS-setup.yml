@@ -1,20 +1,5 @@
 ---
 
-- block:
-    - name: install epel-release (CentOS)
-      yum:
-        name: epel-release
-        state: present
-        update_cache: yes
-
-    - name: install httpd
-      package:
-        name: httpd
-        state: present
-        update_cache: yes
-  tags:
-    - install
-
 - name: setup httpd
   block:
     - name: set httpd.conf (custom)

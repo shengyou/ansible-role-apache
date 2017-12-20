@@ -1,13 +1,3 @@
----
-
-- name: install apache2
-  package:
-    name: apache2
-    state: present
-    update_cache: yes
-  tags:
-    - install
-
 - name: setup apache2
   block:
     - name: set apache2.conf (custom)
