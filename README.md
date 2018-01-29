@@ -1,4 +1,4 @@
-Install Apache2 (httpd)
+Install Apache2 (httpd) [![Build Status](https://travis-ci.org/shengyou/ansible-role-apache.svg?branch=master)](https://travis-ci.org/shengyou/ansible-role-apache)
 =========
 
 安裝 apache2。
