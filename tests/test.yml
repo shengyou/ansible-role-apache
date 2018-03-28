@@ -7,6 +7,11 @@
 
   tasks:
     - command: "ls /usr/sbin/apache2"
+      args:
+        creates: "/usr/sbin/apache2"
       when: ansible_distribution == "Ubuntu"
+
     - command: ls /usr/sbin/httpd
+      args:
+        creates: "/usr/sbin/httpd"
       when: ansible_distribution == "CentOS"
