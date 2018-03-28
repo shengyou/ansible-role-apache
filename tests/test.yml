@@ -1,0 +1,12 @@
+---
+
+- hosts: all
+
+  roles:
+    - role_under_test
+
+  tasks:
+    - command: "ls /usr/sbin/apache2"
+      when: ansible_distribution == "Ubuntu"
+    - command: ls /usr/sbin/httpd
+      when: ansible_distribution == "CentOS"
